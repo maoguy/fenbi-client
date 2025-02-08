@@ -1,0 +1,76 @@
+{
+  "name": "fenbi-client",
+  "displayName": "fenbi-client",
+  "description": "VSCode extension displaying a webview running a React app, with hot module replacement.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.79.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "fenbi-client.helloWorld",
+        "title": "Hello World"
+      }
+    ],
+    "views": {
+      "fenbi-client": [
+        {
+          "id": "vscodeReactStarterView",
+          "type": "webview",
+          "name": "Fenbi Client"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fenbi-client",
+          "title": "Fenbi Client",
+          "icon": "media/icons/refresh.svg"
+        }
+      ]
+    },
+    "configuration": {
+      "title":"FenbiVscClient",
+      "properties": {
+        "fbVscExtConfig.cookie": {
+          "type":"string",
+          "default":"",
+          "markdownDescription": "cookie，必填，请修改后重新进入",
+          "editPresentation": "multilineText"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "install:all": "npm install && cd webview-ui && npm install",
+    "start:webview": "cd webview-ui && npm run start",
+    "build:webview": "cd webview-ui && npm run build",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.79.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "@vscode/test-electron": "^2.3.0",
+    "eslint": "^8.39.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.0.4",
+    "axios": "^1.7.9"
+  }
+}
