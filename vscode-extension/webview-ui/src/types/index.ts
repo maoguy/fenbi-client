@@ -58,3 +58,10 @@ export type TQuestionData = {
     [key:number]:TUserAnswerItem;
   }
 };
+
+export interface TLastAnswerRecord {
+  // lastTime: number;
+  lastCount: number | null;
+  lastAnswer: number | null;
+  lastQuestionId: number | null | undefined;
+}
