@@ -32,7 +32,16 @@ export type TQuestionItem = {
   }[];
   correctAnswer: { choice: string; type: 101 | 102 | 210 } | null;
   hasVideo: number;
-  materialIndexes: number | null;
+  materialIndexes: number[] | null;
+}
+
+export type TSolutionItem = TQuestionItem&{
+  solution:string;
+  source:string;
+  correctAnswer:{
+    choice: string,
+    type: number;
+  };
 }
 
 export type TMaterialItem = {
@@ -59,9 +68,20 @@ export type TQuestionData = {
   }
 };
 
+export type TSolutionData = {
+  exerciseId: number;
+  solutions: TSolutionItem[]; //习题集合
+  materials: TMaterialItem[]; //材料集合
+  userAnswers: {
+    [key:number]:TUserAnswerItem;
+  },
+  correctCount:number;
+  questionCount:number;
+}
+
 export interface TLastAnswerRecord {
   // lastTime: number;
   lastCount: number | null;
-  lastAnswer: number | null;
+  lastAnswer: string | null;
   lastQuestionId: number | null | undefined;
 }

@@ -1,6 +1,7 @@
 import RadioGroup from "./RadioGroup";
 
 interface TProps {
+  disabled?:boolean;
   value: any;
   checked?: boolean;
   onChange?: (checked:boolean)=>void;
@@ -9,6 +10,7 @@ interface TProps {
 
 function Radio (props:TProps) {
   const {
+    disabled,
     value,
     checked=false,
     children,
@@ -23,9 +25,9 @@ function Radio (props:TProps) {
     <div
       style={{
         border:checked?"solid":undefined,
-        cursor:"pointer",
+        cursor:disabled?undefined:"pointer",
       }}
-      onClick={handleClickOfRadio}
+      onClick={disabled?undefined:handleClickOfRadio}
     >
       {children||value}
     </div>

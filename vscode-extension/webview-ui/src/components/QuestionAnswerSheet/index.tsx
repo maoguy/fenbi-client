@@ -1,55 +1,119 @@
 // 答卷
 import React from "react";
 import {
+  TMaterialItem,
   TQuestionData,
-  TQuestionItem
+  TQuestionItem,
+  TSolutionData,
+  TSolutionItem
 } from "../../types";
 import Radio from "../Radio";
 
-interface TAnswerPayload {
+export enum TQuestionAnswerSheetTypes {
+  QUESTION_MODE="QUESTION_MODE",
+  SOLUTION_MODE="SOLUTION_MODE",
+};
+
+export interface TAnswerPayload {
+  exerciseId:number;
   questionId:number;
-  answerChoice:string;
   questionIndex:number;
+  answerChoice:string;
 }
 
-interface TProps {
+type TProps = {
+  type:TQuestionAnswerSheetTypes.QUESTION_MODE;
   questionData:TQuestionData;
   onChange: (payload:TAnswerPayload)=>void;
-}
+} | {
+  type:TQuestionAnswerSheetTypes.SOLUTION_MODE;
+  solutionData:TSolutionData;
+};
 
 function QuestionAnswerSheet (props:TProps) {
-  const { questionData,onChange } = props;
   const {
-    questions=[],
+    type,
+  } = props;
+
+  const questionData =
+    type === TQuestionAnswerSheetTypes.QUESTION_MODE
+    ?
+    props.questionData
+    :
+    props.solutionData;
+
+
+  const {
+    exerciseId,
+    materials=[],
     userAnswers={},
   } = questionData;
-  const [ cacheCheckedValue,setCacheCheckedValue ] = React.useState<any>();
+
+  const questions = type === TQuestionAnswerSheetTypes.QUESTION_MODE
+    ?
+    props.questionData.questions
+    :
+    props.solutionData.solutions;
+
+
+
+  const materialWithShowIndexList = React.useMemo(()=>{
+    const result:(TMaterialItem&{questionIndex:number})[] = [];
+    for(let materialIndex=0;materialIndex<materials.length;materialIndex++){
+      for(let questionIndex=0;questionIndex<questions.length;questionIndex++){
+        if(questions[questionIndex].materialIndexes?.includes(materialIndex)){
+          result.push({
+            ...materials[materialIndex],
+            questionIndex, //将第一个符合条件的questionIndex记下
+          });
+          break; //跳出里层循环(忽略后面符合条件的question)
+        }
+      }
+    }
+    return result;
+  },[materials,questions]);
+
   return (
     <div>
-      <pre>
-        {JSON.stringify(cacheCheckedValue)}
-      </pre>
       <ul>
         {
           questions?.map((
-            question:TQuestionItem,
+            question:TQuestionItem|TSolutionItem,
             questionIndex:number,
           )=>{
             const {
               id,
               content,
               accessories=[],
-              materialIndexes=[]
+              materialIndexes=[],
             } = question
             return (
               <li
                 key={id}
+                style={{
+                  margin:"10px 0"
+                }}
               >
+                {
+                  materialWithShowIndexList?.filter((material) =>{
+                    return material.questionIndex===questionIndex;
+                  }).map((material,materialIndex)=>{
+                    return (
+                      <div
+                        key={`material_${materialIndex}`}
+                        dangerouslySetInnerHTML={{
+                          __html:material.content
+                        }}
+                      />
+                    );
+                  })
+                }
                 <div
                   style={{
-                    display:"flex"
+                    display:"flex",
+                    margin:"5px 0"
                   }}
-                >
+                > 
                   <span>
                     {questionIndex+1}、
                   </span>
@@ -61,7 +125,7 @@ function QuestionAnswerSheet (props:TProps) {
                 </div>
                 {
                   accessories?.map((accessory,accessoryIndex)=>{
-                    let defaultValue = undefined;
+                    let defaultValue:any = undefined;
                     for(let key in userAnswers){
                       const userAnswer = userAnswers[key];
                       // 遍历userAnswers
@@ -71,13 +135,19 @@ function QuestionAnswerSheet (props:TProps) {
                     }
                     return (
                       <Radio.Group
+                        disabled={type===TQuestionAnswerSheetTypes.SOLUTION_MODE}
                         key={`${id}_${accessoryIndex}`}
                         defaultValue={defaultValue}
-                        value={defaultValue}
+                        // value={defaultValue}
                         onChange={
                           (value)=>{
-                            if(value!==undefined){
-                              onChange({
+                            if(
+                              type===TQuestionAnswerSheetTypes.QUESTION_MODE
+                              &&
+                              value!==undefined
+                            ){
+                              props.onChange({
+                                exerciseId,
                                 questionId:id,
                                 answerChoice:value,
                                 questionIndex:questionIndex
@@ -100,21 +170,42 @@ function QuestionAnswerSheet (props:TProps) {
                               }
                             );
                             
+                            let radioChildBackgroup = undefined;
+                            if(type===TQuestionAnswerSheetTypes.SOLUTION_MODE){
+                              if(optionIndex.toString()===question?.correctAnswer?.choice){
+                                //当前项为正确答案
+                                radioChildBackgroup = "green";
+                              }else{
+                                //当前项为错误答案
+                                if(optionIndex.toString()===defaultValue){
+                                  //用户选了错误答案
+                                  radioChildBackgroup = "red";
+                                }
+                              }
+                            }
+
                             return (
                               <Radio
+                                key={optionIndex}
                                 value={optionIndex.toString()}
                               >
-                                <span>
-                                  {
-                                    ["A","B","C","D"][optionIndex]
-                                  }
-                                  、
-                                </span>
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html:newOption
+                                <div
+                                  style={{
+                                    background:radioChildBackgroup
                                   }}
-                                />
+                                >
+                                  <span>
+                                    {
+                                      ["A","B","C","D"][optionIndex]
+                                    }
+                                    、
+                                  </span>
+                                  <span
+                                    dangerouslySetInnerHTML={{
+                                      __html:newOption
+                                    }}
+                                  />
+                                </div>
                               </Radio>
                             );
                           })
@@ -123,17 +214,31 @@ function QuestionAnswerSheet (props:TProps) {
                     );
                   })
                 }
-                <pre>
-                  {/* {JSON.stringify(accessories,null,2)} */}
-                </pre>
+
+                {
+                  type===TQuestionAnswerSheetTypes.SOLUTION_MODE
+                  &&
+                  <div
+                    style={{
+                      border:"dashed",
+                      fontSize:"12px"
+                    }}
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:(question as TSolutionItem)?.solution
+                      }}
+                    />
+                    <small>
+                      ({(question as TSolutionItem)?.source})
+                    </small>
+                  </div>
+                }
               </li>
             );
           })
         }
       </ul>
-      <pre>
-        {/* {JSON.stringify(questionData,null,2)} */}
-      </pre>
     </div>
   );
 }
