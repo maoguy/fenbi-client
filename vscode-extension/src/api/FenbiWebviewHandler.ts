@@ -1,5 +1,8 @@
 import * as vscode from "vscode";
 import {
+  Webview,
+} from "vscode";
+import {
   getCache,
   getCategories,
   getExerciseId,
@@ -10,11 +13,30 @@ import {
   submitExercise,
   getSolution,
 } from "../utils/service";
-import webview from "../utils/webview";
 
-class WebviewHandler {
+interface TPostMessagePayload {
+  command: string;
+  data: any;
+}
+
+class FenbiWebviewHandler {
+  webview:Webview;
+
+  constructor(webview:Webview){
+    this.webview=webview;
+  }
+
+  postMessage({ command, data }:TPostMessagePayload) {
+    setTimeout(()=>{
+      this?.webview?.postMessage({
+        command,
+        data,
+      });
+    }, 50);
+  }
+
   onDidReceiveMessage() {
-    webview.onDidReceiveMessage((message)=>{
+    this.webview.onDidReceiveMessage((message)=>{
       const { postData = {}, command = "" } = message;
       switch(command) {
         case "pageInit":
@@ -37,17 +59,21 @@ class WebviewHandler {
       }
     });
   }
-
+  
+  
   async pageInit() {
     try{
       const cacheResult = await getCache();
       const categoriesResult = await getCategories();
+      const fbVscExtConfig = vscode.workspace.getConfiguration('fbVscExtConfig');
+      
       //通知视图层
-      webview.postMessage({
+      this.webview.postMessage({
         command: "afterPageInit",
         data: {
           cache:cacheResult.data,
           categories:categoriesResult.data,
+          fbVscExtConfig, //vscode配置项
         }
       });
     }catch(error){
@@ -80,7 +106,7 @@ class WebviewHandler {
       console.log("questionResponse",questionResponse);
 
       //通知视图层
-      webview.postMessage({
+      this.webview.postMessage({
         command: "afterGetQuestion",
         data: {
           exerciseId: postExerciseId,
@@ -97,7 +123,6 @@ class WebviewHandler {
       });
     }
   }
-
   async updateStudyTime() {
 
   }
@@ -113,7 +138,7 @@ class WebviewHandler {
         });
       }
       //通知视图层
-      webview.postMessage({
+      this.webview.postMessage({
         command: "afterAnswerQuestion",
         data: {
           exerciseId:payload.exerciseId,
@@ -139,7 +164,7 @@ class WebviewHandler {
         const submitResponse = await submitExercise(exerciseId);
         const exerciseResponse = await getExercise(exerciseId);
         const solutionResponse = await getSolution(exerciseId);
-        webview.postMessage({
+        this.webview.postMessage({
           command: "afterSubmitExercise",
           data: {
             // exerciseData:exerciseResponse?.data,
@@ -169,11 +194,19 @@ class WebviewHandler {
   }:{
     exerciseId: number
   }) {
-    const url = vscode.Uri.parse(
-      `https://www.fenbi.com/spa/tiku/report/exam/solution/xingce/xingce/${exerciseId}/2`
-    );
-    vscode.env.openExternal(url);
+    try{
+      const url = vscode.Uri.parse(
+        `https://www.fenbi.com/spa/tiku/report/exam/solution/xingce/xingce/${exerciseId}/2`
+      );
+      vscode.env.openExternal(url);
+    }catch(error){
+      vscode.window.showErrorMessage("打开异常!","查看详情").then((result)=>{
+        if(result){
+          vscode.window.showErrorMessage(JSON.stringify(error));
+        }
+      });
+    }
   }
 }
 
-export default WebviewHandler;
+export default FenbiWebviewHandler;

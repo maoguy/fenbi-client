@@ -19,7 +19,11 @@ function QuestionCategoryMenu (props:TProps) {
   } = props;
 
   return (
-    <ul>
+    <ul
+      style={{
+        width:"100%"
+      }}
+    >
       {
         categories?.map((category)=>{
           return (

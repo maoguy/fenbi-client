@@ -16,6 +16,7 @@ export type TCategory = {
 export type TPageInitData = {
   cache:TCacheData;
   categories:TCategory[];
+  fbVscExtConfig?:any;
 }
 
 export type TQuestionItem = {

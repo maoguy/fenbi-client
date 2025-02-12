@@ -131,7 +131,12 @@ function IndexPage() {
   },[]);
 
   return (
-    <main>
+    <main
+      style={{
+        opacity:pageInitData?.fbVscExtConfig?.opacity,
+        fontSize:pageInitData?.fbVscExtConfig?.fontSize,
+      }}
+    >
       {/* <h1 className="text-lg bg-vscode-panel-border">
         FB I want ni!
       </h1> */}

@@ -8,6 +8,6 @@ tsconfig.json
 .eslintrc.json
 *.map
 *.ts
-node_modules
+!node_modules/**
 webview-ui
 !webview-ui/build/**

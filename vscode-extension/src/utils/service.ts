@@ -20,6 +20,7 @@ export const getUserQuestionInfo = async () => {
 
 export const getExerciseId = async (params: { keypointId:number }) => {
   const userInfoResponse = await getUserQuestionInfo();
+  console.log(userInfoResponse);
   //用户设置的配置信息
   const {
     questionCount,
@@ -34,7 +35,7 @@ export const getExerciseId = async (params: { keypointId:number }) => {
   data.append("type", "3");
   data.append("exerciseTimeMode","2");
   data.append("keypointId", `${params.keypointId}`);
-  data.append("limit", `${questionCount||15}`);
+  data.append("limit", `${questionCount||5}`);
   data.append("yearScope", `${yearScope}`);
   data.append("correctRatioLow",`${correctRatioLow}`);
   data.append("correctRatioHigh",`${correctRatioHigh}`);

@@ -11,8 +11,7 @@ import {
 import { getUri } from "./utils/getUri"
 import { Extension } from "./helpers/Extension"
 import { getNonce } from "./utils/getNonce"
-import WebviewHanlder from "./api/WebviewHandler";
-import webview from "./utils/webview";
+import FenbiWebviewHandler from "./api/FenbiWebviewHandler";
 
 class VscodeReactStarterView implements WebviewViewProvider {
   public static readonly viewType = "vscodeReactStarterView"
@@ -47,10 +46,8 @@ class VscodeReactStarterView implements WebviewViewProvider {
 
     this._view.webview.html = this._getHtmlForWebview(this._view.webview)
     this._setWebviewMessageListener(this._view.webview)
-
-    webview.init(webviewView);
-
-    new WebviewHanlder().onDidReceiveMessage(); //监听来自视图层的指令
+    new FenbiWebviewHandler(this._view.webview).onDidReceiveMessage(); //监听来自视图层的指令
+    window.showInformationMessage("生活就像海洋，只有意志坚强的人，才能到达彼岸。");
   }
 
   /**
@@ -161,7 +158,9 @@ class VscodeReactStarterView implements WebviewViewProvider {
       },
       undefined,
       this._disposables
-    )
+    );
+
+
   }
 }
 

@@ -9,6 +9,10 @@
   "categories": [
     "Other"
   ],
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/maoguy/fenbi-client.git"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
@@ -32,7 +36,7 @@
         {
           "id": "fenbi-client",
           "title": "Fenbi Client",
-          "icon": "media/icons/refresh.svg"
+          "icon": "media/icons/vscExtIcon.svg"
         }
       ]
     },
@@ -44,6 +48,20 @@
           "default": "",
           "markdownDescription": "cookie，必填，请修改后重新进入",
           "editPresentation": "multilineText"
+        },
+        "fbVscExtConfig.opacity": {
+          "type": "number",
+          "default":1,
+          "minimum": 0,
+          "maximum": 1,
+          "markdownDescription": "透明度(0-1)，选填，请修改后重新进入",
+          "editPresentation": "singlelineText"
+        },
+        "fbVscExtConfig.fontSize": {
+          "type": "number",
+          "default":null,
+          "markdownDescription": "字体大小(px)，选填，请修改后重新进入",
+          "editPresentation": "singlelineText"
         }
       }
     }
@@ -57,7 +75,11 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "build:vsce": "npm run build:webview && vsce package"
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
@@ -67,7 +89,6 @@
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "@vscode/test-electron": "^2.3.0",
-    "axios": "^1.7.9",
     "eslint": "^8.39.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",

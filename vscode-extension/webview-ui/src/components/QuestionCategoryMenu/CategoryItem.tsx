@@ -50,7 +50,7 @@ function CategoryItem (props:TProps) {
               title={isShowChildren?"收起":"展开"}
               style={{paddingRight:5}}
             >
-              {isShowChildren?"▼":"▶"}
+              {isShowChildren?"▼":"▷"}
             </button>
           }
           {name}
@@ -66,9 +66,9 @@ function CategoryItem (props:TProps) {
             {
               cacheData?.keypointIds?.includes(id)
               &&
-              <small>(ing)</small>
+              <small>O|￣|_ </small>
             }
-            ✒️
+            🖊
           </button>
         </div>
       </div>
