@@ -135,12 +135,9 @@ function IndexPage() {
       style={{
         opacity:pageInitData?.fbVscExtConfig?.opacity,
         fontSize:pageInitData?.fbVscExtConfig?.fontSize,
+        color:pageInitData?.fbVscExtConfig?.fontColor,
       }}
     >
-      {/* <h1 className="text-lg bg-vscode-panel-border">
-        FB I want ni!
-      </h1> */}
-
       {/* 菜单模式 */}
       {
         (

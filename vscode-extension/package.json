@@ -62,6 +62,12 @@
           "default":null,
           "markdownDescription": "字体大小(px)，选填，请修改后重新进入",
           "editPresentation": "singlelineText"
+        },
+        "fbVscExtConfig.fontColor": {
+          "type": "string",
+          "default":null,
+          "markdownDescription": "字体颜色(如#333333)，选填，请修改后重新进入",
+          "editPresentation": "singlelineText"
         }
       }
     }
