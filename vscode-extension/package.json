@@ -68,6 +68,12 @@
           "default":null,
           "markdownDescription": "字体颜色(如#333333)，选填，请修改后重新进入",
           "editPresentation": "singlelineText"
+        },
+        "fbVscExtConfig.showMode": {
+          "type": "string",
+          "default": "NORMAL",
+          "markdownDescription": "显示模式，请修改后重新进入",
+          "enum": ["NORMAL", "JSON"]
         }
       }
     }

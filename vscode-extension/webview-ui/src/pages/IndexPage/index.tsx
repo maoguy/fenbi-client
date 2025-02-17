@@ -16,8 +16,6 @@ function IndexPage() {
   const [questionData,setQuestionData] = useState<TQuestionData>();
   const [solutionData,setSolutionData] = useState<TSolutionData>();
 
-  const [scoreReportData,setScoreReportData] = useState<any>();
-
   const questionWithAnswerList = useMemo(() => {
     const {
       questions=[],
@@ -185,6 +183,7 @@ function IndexPage() {
             ?
             <>
               <QuestionAnswerSheet
+                fbVscExtConfig={pageInitData?.fbVscExtConfig}
                 type={TQuestionAnswerSheetTypes.SOLUTION_MODE}
                 solutionData={solutionData}
               />
@@ -208,6 +207,7 @@ function IndexPage() {
             :
             <>
               <QuestionAnswerSheet
+                fbVscExtConfig={pageInitData?.fbVscExtConfig}
                 type={TQuestionAnswerSheetTypes.QUESTION_MODE}
                 questionData={questionData}
                 onChange={handleChangeOfQuestionAnswerSheet}

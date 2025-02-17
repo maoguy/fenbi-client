@@ -24,7 +24,7 @@ function Radio (props:TProps) {
   return (
     <div
       style={{
-        border:checked?"solid":undefined,
+        border:checked?"2px dotted":undefined,
         cursor:disabled?undefined:"pointer",
       }}
       onClick={disabled?undefined:handleClickOfRadio}
