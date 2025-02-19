@@ -391,11 +391,9 @@ function QuestionAnswerSheet (props:TProps) {
                       fontSize:"12px"
                     }}
                   >
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html:(question as TSolutionItem)?.solution
-                      }}
-                    />
+                    <DangerouslyHTMLComponent>
+                      {(question as TSolutionItem)?.solution}
+                    </DangerouslyHTMLComponent>
                     <small>
                       ({(question as TSolutionItem)?.source})
                     </small>
