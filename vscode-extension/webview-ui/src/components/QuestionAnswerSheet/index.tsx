@@ -8,6 +8,7 @@ import {
   TSolutionItem
 } from "../../types";
 import Radio from "../Radio";
+import DangerouslyHTMLComponent,{TTagTypes} from "../DangerouslyHTMLComponent";
 
 export enum TQuestionAnswerSheetTypes {
   QUESTION_MODE="QUESTION_MODE",
@@ -106,12 +107,11 @@ function QuestionAnswerSheet (props:TProps) {
                       return material.questionIndex===questionIndex;
                     }).map((material,materialIndex)=>{
                       return (
-                        <div
+                        <DangerouslyHTMLComponent
                           key={`material_${materialIndex}`}
-                          dangerouslySetInnerHTML={{
-                            __html:material.content
-                          }}
-                        />
+                        >
+                          {material.content}
+                        </DangerouslyHTMLComponent>
                       );
                     })
                   }
@@ -124,11 +124,9 @@ function QuestionAnswerSheet (props:TProps) {
                   <div>
                     "question":"
                   </div> 
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:content
-                    }}
-                  />
+                  <DangerouslyHTMLComponent>
+                    {content}
+                  </DangerouslyHTMLComponent>
                   <div>
                     ",
                   </div>
@@ -170,17 +168,6 @@ function QuestionAnswerSheet (props:TProps) {
                         >
                           {
                             accessory?.options?.map((option,optionIndex)=>{
-                              const newOption = option.replace(
-                                /(<img[^>]+src=\")([^"]+)/g,
-                                function (match: any, p1: string, p2: string) {
-                                  // 如果 src 已经包含 https:，则不修改
-                                  if (p2.startsWith("https:")) {
-                                    return p1 + p2;
-                                  }
-                                  // 如果没有 https:，则添加
-                                  return p1 + "https:" + p2;
-                                }
-                              );
                               
                               let radioChildBackgroup = undefined;
                               if(type===TQuestionAnswerSheetTypes.SOLUTION_MODE){
@@ -213,11 +200,11 @@ function QuestionAnswerSheet (props:TProps) {
                                       }
                                     </span>
                                     .
-                                    <span
-                                      dangerouslySetInnerHTML={{
-                                        __html:newOption
-                                      }}
-                                    />
+                                    <DangerouslyHTMLComponent
+                                      type={TTagTypes.SPAN}
+                                    >
+                                      {option}
+                                    </DangerouslyHTMLComponent>
                                     ",
                                   </div>
                                 </Radio>
@@ -242,11 +229,9 @@ function QuestionAnswerSheet (props:TProps) {
                       <div>
                         "parse":"
                       </div>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html:(question as TSolutionItem)?.solution
-                        }}
-                      />
+                      <DangerouslyHTMLComponent>
+                        {(question as TSolutionItem)?.solution}
+                      </DangerouslyHTMLComponent>
                       <small>
                         ({(question as TSolutionItem)?.source})
                       </small>
@@ -294,12 +279,11 @@ function QuestionAnswerSheet (props:TProps) {
                     return material.questionIndex===questionIndex;
                   }).map((material,materialIndex)=>{
                     return (
-                      <div
+                      <DangerouslyHTMLComponent
                         key={`material_${materialIndex}`}
-                        dangerouslySetInnerHTML={{
-                          __html:material.content
-                        }}
-                      />
+                      >
+                        {material.content}
+                      </DangerouslyHTMLComponent>
                     );
                   })
                 }
@@ -312,11 +296,11 @@ function QuestionAnswerSheet (props:TProps) {
                   <span>
                     {questionIndex+1}、
                   </span>
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html:content
-                    }}
-                  />
+                  <DangerouslyHTMLComponent
+                    type={TTagTypes.SPAN}
+                  >
+                    {content}
+                  </DangerouslyHTMLComponent>
                 </div>
                 {
                   accessories?.map((accessory,accessoryIndex)=>{
@@ -353,18 +337,6 @@ function QuestionAnswerSheet (props:TProps) {
                       >
                         {
                           accessory?.options?.map((option,optionIndex)=>{
-                            const newOption = option.replace(
-                              /(<img[^>]+src=\")([^"]+)/g,
-                              function (match: any, p1: string, p2: string) {
-                                // 如果 src 已经包含 https:，则不修改
-                                if (p2.startsWith("https:")) {
-                                  return p1 + p2;
-                                }
-                                // 如果没有 https:，则添加
-                                return p1 + "https:" + p2;
-                              }
-                            );
-                            
                             let radioChildBackgroup = undefined;
                             if(type===TQuestionAnswerSheetTypes.SOLUTION_MODE){
                               if(optionIndex.toString()===question?.correctAnswer?.choice){
@@ -395,11 +367,11 @@ function QuestionAnswerSheet (props:TProps) {
                                     }
                                     、
                                   </span>
-                                  <span
-                                    dangerouslySetInnerHTML={{
-                                      __html:newOption
-                                    }}
-                                  />
+                                  <DangerouslyHTMLComponent
+                                    type={TTagTypes.SPAN}
+                                  >
+                                    {option}
+                                  </DangerouslyHTMLComponent>
                                 </div>
                               </Radio>
                             );
