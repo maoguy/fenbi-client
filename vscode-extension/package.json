@@ -44,12 +44,14 @@
       "title": "FenbiVscClient",
       "properties": {
         "fbVscExtConfig.cookie": {
+          "order": 1,
           "type": "string",
           "default": "",
           "markdownDescription": "cookie，必填，请修改后重新进入",
           "editPresentation": "multilineText"
         },
         "fbVscExtConfig.opacity": {
+          "order": 2,
           "type": "number",
           "default":1,
           "minimum": 0,
@@ -58,22 +60,47 @@
           "editPresentation": "singlelineText"
         },
         "fbVscExtConfig.fontSize": {
+          "order": 3,
           "type": "number",
           "default":null,
           "markdownDescription": "字体大小(px)，选填，请修改后重新进入",
           "editPresentation": "singlelineText"
         },
         "fbVscExtConfig.fontColor": {
+          "order": 4,
           "type": "string",
           "default":null,
           "markdownDescription": "字体颜色(如#333333)，选填，请修改后重新进入",
           "editPresentation": "singlelineText"
         },
         "fbVscExtConfig.showMode": {
+          "order": 5,
           "type": "string",
           "default": "NORMAL",
           "markdownDescription": "显示模式，请修改后重新进入",
           "enum": ["NORMAL", "JSON"]
+        },
+        "fbVscExtConfig.isShowMask": {
+          "order": 98,
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "是否显示遮罩层，请修改后重新进入"
+        },
+        "fbVscExtConfig.maskOpacity": {
+          "order": 99,
+          "type": "number",
+          "default":1,
+          "minimum": 0,
+          "maximum": 1,
+          "markdownDescription": "遮罩层透明度(0-1)，选填，请修改后重新进入【仅当isShowMask被置真时有效】",
+          "editPresentation": "singlelineText"
+        },
+        "fbVscExtConfig.maskFontSize": {
+          "order": 100,
+          "type": "number",
+          "default":null,
+          "markdownDescription": "遮罩层字体大小(px)，选填，请修改后重新进入【仅当isShowMask被置真时有效】",
+          "editPresentation": "singlelineText"
         }
       }
     }

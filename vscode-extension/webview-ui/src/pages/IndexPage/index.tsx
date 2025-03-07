@@ -1,6 +1,6 @@
 import { useState,useEffect,useMemo } from "react"
 import { vscode } from "../../utils/vscode"
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
+import { VSCodeButton,VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import {
   TPageInitData,
   TQuestionData,
@@ -98,6 +98,7 @@ function IndexPage() {
   }
 
   useEffect(()=>{
+    setIsLoading(true);
     vscode.postMessage({
       command:"pageInit"
     });
@@ -128,7 +129,34 @@ function IndexPage() {
     })
   },[]);
 
+  const backToMenuElm = (
+    <div
+      style={{
+        display:"flex",
+        justifyContent:"space-between",
+      }}
+    >
+      <VSCodeButton
+        style={{
+          width:"100%"
+        }}
+        onClick={
+          ()=>{
+            vscode.postMessage({
+              command:"pageInit"
+            });
+            setQuestionData(undefined); //退出时清空问题数据
+            setSolutionData(undefined); //清空答案信息
+          }
+        }
+      >
+        返回菜单
+      </VSCodeButton>
+    </div>
+  );
+
   return (
+    <>
     <main
       style={{
         opacity:pageInitData?.fbVscExtConfig?.opacity,
@@ -155,29 +183,7 @@ function IndexPage() {
         questionData
         &&
         <div>
-          <div
-            style={{
-              display:"flex",
-              justifyContent:"space-between",
-            }}
-          >
-            <VSCodeButton
-              style={{
-                width:"100%"
-              }}
-              onClick={
-                ()=>{
-                  vscode.postMessage({
-                    command:"pageInit"
-                  });
-                  setQuestionData(undefined); //退出时清空问题数据
-                  setSolutionData(undefined); //清空答案信息
-                }
-              }
-            >
-              返回菜单
-            </VSCodeButton>
-          </div>
+          {backToMenuElm}
           {
             solutionData
             ?
@@ -192,15 +198,23 @@ function IndexPage() {
                 solutionData
                 &&
                 <>
-                  <div>
-                    答对题目数：{solutionData?.correctCount} /{" "}
-                    {solutionData?.questionCount}{" "}
-                  </div>
-                  <VSCodeButton
-                    onClick={jumpToFenbiWeb}
+                  <div
+                    style={{
+                      display:"flex",
+                      justifyContent:"space-between"
+                    }}
                   >
-                    跳转粉笔网址
-                  </VSCodeButton>
+                    <div>
+                      答对题目数：{solutionData?.correctCount} /{" "}
+                      {solutionData?.questionCount}{" "}
+                    </div>
+                    <VSCodeLink
+                      onClick={jumpToFenbiWeb}
+                    >
+                      跳转粉笔网址
+                    </VSCodeLink>
+                  </div>
+                  {backToMenuElm}
                 </>
               }
             </>
@@ -249,8 +263,6 @@ function IndexPage() {
               </VSCodeButton>
             </>
           }
-          
-          
         </div>
       }
 
@@ -259,6 +271,62 @@ function IndexPage() {
       
       {/* <VSCodeButton onClick={handleHowdyClick}>Howdy!</VSCodeButton> */}
     </main>
+    {
+      pageInitData?.fbVscExtConfig?.isShowMask
+      &&
+      <div
+        style={{
+          position:"fixed",
+          opacity:pageInitData?.fbVscExtConfig.maskOpacity,
+          fontSize:pageInitData?.fbVscExtConfig.maskFontSize,
+          zIndex:-1,
+          top:0,
+        }}
+      >
+        <div
+          style={{
+            overflowY: 'auto',
+            fontFamily: 'monospace',
+            lineHeight: 3,
+          }}
+        >
+          <div>[INFO] your extension "fenbi-client" is now active!...</div>
+          <div>[INFO] Changed...</div>
+          <div>[INFO] Changed...</div>
+          <div>[INFO] build started...</div>
+          <div>[INFO] ✓ 2 modules transformed.</div>
+          <div style={{ color: '#0f0' }}>[SUCCESS] ../extension/dist/contentScripts/style.css            4.21 kB │ gzip:   1.22 kB</div>
+          <div>[INFO] Changed...</div>
+          <div>[INFO] build started...</div>
+          <div>[INFO] ✓ 2 modules transformed.</div>
+          <div style={{ color: '#ff0' }}>[WARNING] Deprecated function used in file.js</div>
+          <div style={{ color: '#0f0' }}>[SUCCESS] Compilation started...</div>
+
+          
+          <div>[INFO] Changed...</div>
+          <div>[INFO] Changed...</div>
+          <div style={{ color: '#f00' }}>[ERROR] Syntax error in file.js</div>
+          <div style={{ color: '#0f0' }}>[SUCCESS] Compilation completed successfully.</div>
+          <div>[INFO] Changed...</div>
+          <div>[INFO] Changed...</div>
+          <div>[INFO] build started...</div>
+          <div>[INFO] ✓ 2 modules transformed.</div>
+          <div style={{ color: '#0f0' }}>[SUCCESS] ../extension/dist/contentScripts/style.css            4.21 kB │ gzip:   1.22 kB</div>
+          <div>[INFO] Changed...</div>
+          <div>[INFO] build started...</div>
+          <div>[INFO] ✓ 2 modules transformed.</div>
+          <div style={{ color: '#ff0' }}>[WARNING] Deprecated function used in file.js</div>
+          <div style={{ color: '#0f0' }}>[SUCCESS] Compilation started...</div>
+
+          
+          <div>[INFO] Changed...</div>
+          <div>[INFO] Changed...</div>
+          <div style={{ color: '#f00' }}>[ERROR] Syntax error in file.js</div>
+          <div style={{ color: '#0f0' }}>[SUCCESS] Compilation completed successfully.</div>
+        </div>
+      </div>
+    }
+    </>
   )
 }
 
