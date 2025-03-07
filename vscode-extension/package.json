@@ -2,7 +2,7 @@
   "name": "fenbi-client",
   "displayName": "fenbi-client",
   "description": "VSCode extension displaying a webview running a React app, with hot module replacement.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.79.0"
   },
