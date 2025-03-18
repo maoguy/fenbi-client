@@ -101,7 +101,7 @@ function useXingceState () {
     switch(command) {
       case "afterPageInit":
         setIsLoading(false);
-        setPageInitData(data);
+        setPageInitData(data||{});
         break;
       case "afterGetQuestion":
         setIsLoading(false);

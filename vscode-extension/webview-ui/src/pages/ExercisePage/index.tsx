@@ -28,9 +28,10 @@ function ExercisePage () {
 
   useEffect(()=>{
     if(pageInitData){
+      //当初始化数据存在时,才进行试题请求
       fetchQuestionData(parseInt(id as string));
     }
-  },[pageInitData?.cache?.exerciseId]);
+  },[pageInitData]);
 
   const backToMenuElm = (
     <div
